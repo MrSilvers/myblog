@@ -1,0 +1,64 @@
+{% load staticfiles %}
+{%load blog_tags%}
+<div class="widget widget-recent-posts">
+                    <h3 class="widget-title">最新文章</h3>
+                    {% get_recent_posts as recent_list %}
+                    <ul>
+                        {% for post in recent_list %}
+                        <li>
+                            <a href="{% url 'blog:blog_detail' post.id %}">{{ post.title }}</a>
+                        </li>
+                        {% empty %}
+                        暂无文章
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="widget widget-archives">
+                    <h3 class="widget-title">归档</h3>
+                    {% archives as date_list %}
+                    <ul>
+                        {% for date in date_list %}
+                        <li>
+                            <a href="{% url 'blog:blog_list_by_date' date.year date.month %}">{{date.year}} 年 {{date.month}} 月</a>
+                        </li>
+                        {% empty %}
+                        暂无归档
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="widget widget-category">
+                    <h3 class="widget-title">分类</h3>
+                    {% get_categories as category_list %}
+                    <ul>
+                        {% for category in category_list %}
+                        <li>
+                            <a href="{% url 'blog:blog_list_by_category' category.name %}">{{ category.name }}
+                            <span class="post-count">({{ category.num_posts }})
+                            </span>
+                            </a>
+                        </li>
+                        {% empty %}
+                        暂无分类
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="widget widget-tag-cloud">
+                    <h3 class="widget-title">标签云</h3>
+                    {% get_tags as tag_list %}
+                    <ul>
+                      {% for tag in tag_list %}
+                        <li>
+                            <a href="#">{{tag.name}}</a>
+                        </li>
+                      {% empty %}
+                      暂无标签
+                      {% endfor %}
+                    </ul>
+                </div>
+                <!--RSS订阅，暂时不实现
+                <div class="rss">
+                    <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+                </div>
+                -->

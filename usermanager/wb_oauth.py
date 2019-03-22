@@ -1,0 +1,31 @@
+import requests
+import json
+
+class OAuthWB:
+    def __init__(self,client_id,client_key,redirect_uri):
+        self.client_id = client_id
+        self.client_key = client_key
+        self.redirect_uri = redirect_uri
+    #获得微博用户的token    
+    def get_access_token(self,code):
+        url = "https://api.weibo.com/oauth2/access_token"
+        querystring = {
+            "client_id":self.client_id,
+            "client_secret":self.client_key,
+            "grant_type":"authorization_code",
+            "code":code,
+            "redirect_uri":self.redirect_uri,
+        }
+        response = requests.request("POST",url,params=querystring)
+        
+        return json.loads(response.text)
+    #通过微博用户的token获得微博用户的个人信息    
+    def get_user_info(self,accessed_token_data):
+        url = "https://api.weibo.com/2/users/show.json"
+        querystring = {
+            "uid":accessed_token_data['uid'],
+            "access_token":accessed_token_data['access_token']
+        }
+        response = requests.request("GET",url,params=querystring)
+        return json.loads(response.text)
+    

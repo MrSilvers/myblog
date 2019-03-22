@@ -1,0 +1,24 @@
+<div class="overlay overlay-hugeinc">
+    <button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>
+    <nav>
+        <ul>
+            <li><a href="{% url 'blog:blog_list' %}">首页</a></li>
+            <li><a href="{% url 'blog:blog_list' %}">博客</a></li>
+            <li><a href="{% url 'blog:about_me' %}">关于</a></li>
+            <!--
+            {% if request.session.uid %}
+            <li class="cl-effect-11">
+            <a href="{% url 'usermanager:logout' %}" data-hover="{{ request.session.username }}">
+            {{request.session.username}}
+            </a>
+            </li>
+            {% else %}
+            <li class="cl-effect-11"><a href="{% url 'usermanager:login' %}" data-hover="登录">
+            登录
+            </a>
+            </li>
+            {% endif %}
+            -->
+        </ul>
+    </nav>
+</div>

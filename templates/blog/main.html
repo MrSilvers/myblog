@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="content-body">
+    <div class="container">
+        <div class="row">
+            <main class="col-md-8">
+            {% block blog %}{% endblock blog %}
+            </main>
+            <aside class="col-md-4">
+              {% block toc %}
+              {% endblock toc %}
+              {% include 'blog/right.html' %}
+            </aside>
+        </div>
+    </div>
+</div>
+{% endblock content %}
