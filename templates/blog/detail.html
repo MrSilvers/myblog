@@ -1,4 +1,5 @@
 {% extends 'blog/main.html' %}
+{% block title %}{{ post.title }}|silvers.xyz{% endblock title %}
 {% block blog %}
                 <article class="post post-1">
                     <header class="entry-header">
@@ -8,17 +9,25 @@
                             <span class="post-category"><a href="{% url 'blog:blog_list_by_category' post.category.name %}">{{post.category}}</a></span>
                             <span class="post-date"><a><time class="entry-date"
                                                                       datetime="2012-11-09T23:15:57+00:00">{{ post.timestamp }}</time></a></span>
+                            
                             <!--评论功能暂时不实现-->
                             <!--<span class="comments-link"><a>4 评论</a></span>-->
                             
                             <span class="views-count"><a>{{post.views}} 阅读</a></span>
                             
                         </div>
+                        <div class="entry-meta">
+                        {% if post.timestamp != post.updated %}
+                        <a>文章于<time class="entry-date"
+                                               datetime="2012-11-09T23:15:57+00:00">{{ post.updated }}</time>更新</a>
+                        {% endif %}
+                        </div>
                     </header>
                     <hr>
                     <div class="entry-content clearfix">
                         {{ post.body|safe }}
                     </div>
+                    
                 </article>
                 <section class="comment-area" id="comment-area">
                     <br>
