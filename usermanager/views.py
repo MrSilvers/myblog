@@ -12,8 +12,7 @@ def weibo_login(request):
         settings.WEIBO_APP_ID + '&redirect_uri' + 
         settings.WEIBO_REDIRECT_URI)
     url2 = "https://api.weibo.com/oauth2/authorize?client_id="+settings.WEIBO_APP_ID+"&response_type=code&redirect_uri="+settings.WEIBO_REDIRECT_URI
-    url3 = "https://api.weibo.com/oauth2/authorize?client_id=1081881507&response_type=code&redirect_uri=http://127.0.0.1:8000/usermanager/login/process"
-    return HttpResponseRedirect(url3)
+    return HttpResponseRedirect(url2)
     
 def weibo_get_code(request):
     #登录后会跳转到这里，获取授权吗code
