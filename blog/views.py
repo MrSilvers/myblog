@@ -10,6 +10,17 @@ from comments.models import Comment
 
 # Create your views here.
 
+
+# 过滤markdown关键字符
+def blogs_format(posts):
+    for post in posts:
+        post_temp = '' 
+        for s in post.body[:70]: # 只过滤前70个字符
+            if s not in ['#','*','~','>','-','']:
+                post_temp += s # 把过滤好的字符加进来
+        post.body = post_temp
+    return posts
+
 #该函数是实现了页面分页，它接收3个参数，依次是用户的request、
 #从数据库取得的符合要求的blog以及人为设置的一页可显示的最大文章数目num
 def page_button(request,post_list,num):
@@ -17,9 +28,10 @@ def page_button(request,post_list,num):
     page = request.GET.get('page')
     posts = paginator.get_page(page)
     return posts
-    
+ 
+ # 网站首页视图   
 def archive(request):
-    posts = BlogPost.objects.all()#get all blog date from blog database
+    posts = blogs_format(BlogPost.objects.all()) # get all blog date from blog database
     
     '''posts_new = []
     for post in posts:
@@ -39,6 +51,7 @@ def archive(request):
 #原理：网页触发请求，指定app内的urls.py的path，再通
 #过path，调用views.py内path指定的函数，最后return
 
+# 博客详情视图
 def archive_detail(request,id):
     #把posts全部读取后，list2页面实际上已经获得了每
     #一个blogpost的信息，当然也知道每一个blog的id，
@@ -71,28 +84,32 @@ def archive_detail(request,id):
     context = {'post':post,'toc':md.toc,'comments_list':comments,'form':form}
     return render(request,'blog/detail.html',context)
 
+# 归档处理视图
 def blog_list_by_date(request,year,month):
-    posts = BlogPost.objects.filter(timestamp__year=year,
+    posts = blogs_format(BlogPost.objects.filter(timestamp__year=year,
                                     timestamp__month=month
-                                    ).order_by('-timestamp')
+                                    ).order_by('-timestamp'))
     #context = {'posts':posts}
     context = {'posts':page_button(request,posts,10)}
     return render(request,'blog/index.html',context)
     
+ # 分类处理视图
 def blog_list_by_category(request,category):
-    posts = BlogPost.objects.filter(category__name=category
-                                    ).order_by('-timestamp')
+    posts = blogs_format(BlogPost.objects.filter(category__name=category
+                                    ).order_by('-timestamp'))
     #context = {'posts':posts}
     context = {'posts':page_button(request,posts,10)}
     return render(request,'blog/index.html',context)
-
+# 关于我视图
 def about_me(request):
     return render(request,'blog/about.html')
 
+# 博客页面视图
 def blog_index(request):
-    posts = BlogPost.objects.all()#get all blog date from blog database
+    posts = blogs_format(BlogPost.objects.all())#get all blog date from blog database
     context = {'posts':page_button(request,posts,10)}
     return render(request,'blog/blog.html',context)
+
 '''def create_blog(request):
     if request.method == "POST":
         #将提交的数据赋值到表单实例中
