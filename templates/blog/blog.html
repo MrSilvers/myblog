@@ -1,50 +1,48 @@
 {% extends 'blog/base.html' %}
 {% block title %}博客|silvers.xyz{% endblock title %}
 {% block content %}
+	<div class="content-body">
+		<div class="container">
+			<div class="row">
+				<main class="col-md-12">
+				{% for post in posts %}
+					<article class="post post-{{ post.id }}">
+						<header class="entry-header">
+							<h1 class="entry-title">
+								<a href="{% url 'blog:blog_detail' post.id %}">{{ post.title }}</a>
+							</h1>
+							<div class="entry-meta">
+								<span class="post-category"><a href="{% url 'blog:blog_list_by_category' post.category.name %}"> {{post.title}} </a></span>
 
-		<div class="content-body">
-			<div class="container">
-				<div class="row">
-					<main class="col-md-12">
-					{% for post in posts %}
-						<article class="post post-{{ post.id }}">
-							<header class="entry-header">
-								<h1 class="entry-title">
-									<a href="{% url 'blog:blog_detail' post.id %}">{{ post.title }}</a>
-								</h1>
-								<div class="entry-meta">
-									<span class="post-category"><a href="{% url 'blog:blog_list_by_category' post.category.name %}"> {{post.title}} </a></span>
-			        
-									<span class="post-date"><a href="#"><time class="entry-date" datetime="2012-11-09T23:15:57+00:00">{{ post.timestamp }}</time></a></span>    
-												
-									<!--<span class="comments-link"><a href="">4 Comments</a></span>-->
-									<span class="views-count"><a>{{post.views}} 阅读</a></span>
-								</div>
-							</header>
-							<div class="entry-content clearfix">
-								{{post.body|slice:'100'|safe}}
-								<div class="read-more cl-effect-14">
-									<a href="{% url 'blog:blog_detail' post.id %}" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
-								</div>
+								<span class="post-date"><a href="#"><time class="entry-date" datetime="2012-11-09T23:15:57+00:00">{{ post.timestamp }}</time></a></span>
+
+								<!--<span class="comments-link"><a href="">4 Comments</a></span>-->
+								<span class="views-count"><a>{{post.views}} 阅读</a></span>
 							</div>
-						</article>
-					{% empty %}
-                    <div class="no-post">暂时还没有发布的文章！</div>
-					{% endfor %}  
-					
-					<!-- 简单分页效果 -->
-                    <div class="pagination-simple">
-                    {% if posts.has_previous %}
-                    <a href="?page={{ posts.previous_page_number }}">上一页</a>
-                    {% endif %}
-                    <span class="current">第 {{ posts.number }} 页 / 共 {{posts.paginator.num_pages}} 页</span>
-                    {% if posts.has_next %}
-                    <a href="?page={{ posts.next_page_number }}">下一页</a>
-                    {% endif %}
-                </div>
-					</main>
-				</div>
+						</header>
+						<div class="entry-content clearfix">
+							{{post.body|slice:'100'|safe}}
+							<div class="read-more cl-effect-14">
+								<a href="{% url 'blog:blog_detail' post.id %}" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
+							</div>
+						</div>
+					</article>
+				{% empty %}
+				<div class="no-post">暂时还没有发布的文章！</div>
+				{% endfor %}
+
+				<!-- 简单分页效果 -->
+				<div class="pagination-simple">
+				{% if posts.has_previous %}
+				<a href="?page={{ posts.previous_page_number }}">上一页</a>
+				{% endif %}
+				<span class="current">第 {{ posts.number }} 页 / 共 {{posts.paginator.num_pages}} 页</span>
+				{% if posts.has_next %}
+				<a href="?page={{ posts.next_page_number }}">下一页</a>
+				{% endif %}
+			</div>
+				</main>
 			</div>
 		</div>
-		
+	</div>
 {% endblock content %}		

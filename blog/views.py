@@ -1,25 +1,27 @@
 from django.shortcuts import render,redirect
 from django.template import loader,Context
+from django.utils.html import strip_tags
 from django.http import HttpResponse
-from blog.models import BlogPost
+from .models import BlogPost
 import markdown
-from blog.forms import BlogPostForm
+from .forms import BlogPostForm
 from django.core.paginator import Paginator
 from comments.forms import CommentForm
 from comments.models import Comment
 
 # Create your views here.
 
-
 # 过滤markdown关键字符
 def blogs_format(posts):
+    md = markdown.Markdown(extensions=['markdown.extensions.extra',
+                                       'markdown.extensions.codehilite', ])
     for post in posts:
-        post_temp = '' 
-        for s in post.body[:70]: # 只过滤前70个字符
-            if s not in ['#','*','~','>','-','']:
-                post_temp += s # 把过滤好的字符加进来
-        post.body = post_temp
+        safe_post = strip_tags(md.convert(post.body))
+        post.body = safe_post
     return posts
+
+
+
 
 #该函数是实现了页面分页，它接收3个参数，依次是用户的request、
 #从数据库取得的符合要求的blog以及人为设置的一页可显示的最大文章数目num
@@ -98,8 +100,18 @@ def blog_list_by_category(request,category):
     posts = blogs_format(BlogPost.objects.filter(category__name=category
                                     ).order_by('-timestamp'))
     #context = {'posts':posts}
+    print(posts)
     context = {'posts':page_button(request,posts,10)}
     return render(request,'blog/index.html',context)
+
+def blog_list_by_tag(request,tag):
+    print(request)
+    print(tag)
+    posts = blogs_format(BlogPost.objects.filter(tags__name=tag).order_by('-timestamp'))
+    print(posts)
+    context = {'posts':page_button(request,posts,10)}
+    return render(request,'blog/index.html',context)
+
 # 关于我视图
 def about_me(request):
     return render(request,'blog/about.html')
@@ -110,7 +122,7 @@ def blog_index(request):
     context = {'posts':page_button(request,posts,10)}
     return render(request,'blog/blog.html',context)
 
-'''def create_blog(request):
+def create_blog(request):
     if request.method == "POST":
         #将提交的数据赋值到表单实例中
         blog_post_form = BlogPostForm(data=request.POST)
@@ -130,9 +142,9 @@ def blog_index(request):
         blog_post_form = BlogPostForm()
         #赋值上下文
         context = {'blog_post_form':blog_post_form}
-        return render(request,'blog/createblog2.html',context)
+        return render(request,'blog/old_version/createblog2.html',context)
 
-def delete_blog(request,id):
+'''def delete_blog(request,id):
     #根据id获取需要删除的文章
     blog = BlogPost.objects.get(id=id)
     blog.delete()

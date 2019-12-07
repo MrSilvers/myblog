@@ -1,6 +1,5 @@
 {% load staticfiles %}
 {%load blog_tags%}
-<!DOCTYPE html>
 <html>
 <head>
     <title>{% block title %}{% endblock title %}</title>
@@ -13,6 +12,7 @@
     <!--<link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">-->
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!--<link rel="stylesheet" href="{% static 'blog/css/ionicons.min.css' %}">-->
     <link rel="stylesheet" href="{% static 'blog/css/pace.css' %}">
     <link rel="stylesheet" href="{% static 'blog/css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'blog/css/highlights/github.css' %}">
@@ -27,13 +27,11 @@
 </head>
 
 <body>
+
 <!--顶部-->
 {% include 'blog/header.html' %}
-<div class="copyrights">Powered by <a href="http://www.djangoproject.com/">Django</a></div>
-<div class="copyrights">Theme by <a href="http://www.cssmoban.com/">www.cssmoban.com</a></div>
 <!--中部-->
 {% block content %}{% endblock content %}
-
 <!--底部-->
 {% include 'blog/footer.html' %}
 
